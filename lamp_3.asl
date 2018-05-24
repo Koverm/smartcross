@@ -3,7 +3,7 @@
 
 /* Initial goals */
 
-!green.
+!turnoff.
 
 /* Plans */
 
@@ -18,4 +18,8 @@
 	  !green.
 
 
-
++!turnoff : true <- 
+	turnoff3;
+	.wait(50000);
+	-turnoff;
+	!green.

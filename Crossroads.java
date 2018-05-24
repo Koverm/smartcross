@@ -21,6 +21,11 @@ public class Crossroads extends Environment{
 	public boolean l3;
 	public boolean l4;
 	
+	public boolean loff1;
+	public boolean loff2;
+	public boolean loff3;
+	public boolean loff4;
+	
 	private int pedlast;
 		
 	static Logger logger = Logger.getLogger(Crossroads.class.getName());
@@ -30,6 +35,12 @@ public class Crossroads extends Environment{
 	public static final Term s2 = Literal.parseLiteral("switch2");
 	public static final Term s3 = Literal.parseLiteral("switch3");
 	public static final Term s4 = Literal.parseLiteral("switch4");
+	
+	
+	public static final Term toff1 = Literal.parseLiteral("turnoff1");
+	public static final Term toff2 = Literal.parseLiteral("turnoff2");
+	public static final Term toff3 = Literal.parseLiteral("turnoff3");
+	public static final Term toff4 = Literal.parseLiteral("turnoff4");
 	
 	public static final Term mp = Literal.parseLiteral("move(pedestrian)");
 	public static final Term mc1 = Literal.parseLiteral("move(car_1)");
@@ -48,6 +59,12 @@ public class Crossroads extends Environment{
 		l3=true;
 		l4=false;
 		pedlast=4;
+		
+		loff1 = false;
+		loff2 = false;
+		loff3 = false;
+		loff4 = false;
+		
     }
 	
 	
@@ -62,12 +79,16 @@ public class Crossroads extends Environment{
 			
 			if (action.equals(s1)) {
 				l1= !l1;
+				loff1 = false;
 			}else if (action.equals(s2)){
 				l2= !l2;
+				loff2 = false;
 			}else if (action.equals(s3)){
 				l3= !l3;
+				loff3 = false;
 			}else if (action.equals(s4)){
 				l4= !l4;
+				loff4 = false;
 			}else if (action.equals(mp)){
 				model.movePedastrian();
 			}else if (action.equals(mc1)){
@@ -76,6 +97,17 @@ public class Crossroads extends Environment{
 				model.moveCar2();
 			}else if (action.equals(mc3)){
 				model.moveCar3();
+			}else if (action.equals(toff1)){
+				loff1 = true;
+			}
+			else if (action.equals(toff2)){
+				loff2 = true;
+			}
+			else if (action.equals(toff3)){
+				loff3 = true;
+			}
+			else if (action.equals(toff4)){
+				loff4 = true;
 			}
 			
 			
@@ -173,14 +205,22 @@ class CrossModel extends GridWorldModel {
 				loc.x++;
 			}else if (loc.y==5 && loc.x>=1 && loc.x <=11&& loc.x!=7&&!getAgPos(2).equals(new Location(loc.x-1,loc.y))&&!getAgPos(3).equals(new Location(loc.x-1,loc.y))){
 				loc.x--;
-			}else if (loc.y==6&&loc.x==4&&l1&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))&&!getAgPos(3).equals(new Location(loc.x+1,loc.y))){
-				loc.x++;
-			}else if(loc.y==5&&loc.x==7&&l3&&!getAgPos(2).equals(new Location(loc.x-1,loc.y))&&!getAgPos(3).equals(new Location(loc.x-1,loc.y))){
-				loc.x--;
 			}else if(loc.x==11&&loc.y==6&&!getAgPos(2).equals(new Location(loc.x,loc.y-1))&&!getAgPos(3).equals(new Location(loc.x,loc.y-1))){
 				loc.y=5;
 			}else if(loc.x==0&&loc.y==5&&!getAgPos(2).equals(new Location(loc.x,loc.y+1))&&!getAgPos(3).equals(new Location(loc.x,loc.y+1))){
 				loc.y=6;
+			}else if (loc.x==4&&loc.y==6&&loff1){
+				if (!getAgPos(2).equals(new Location(loc.x+1,loc.y))&&!getAgPos(3).equals(new Location(loc.x+1,loc.y))&&!getAgPos(2).equals(new Location(6,7))&&!getAgPos(3).equals(new Location(6,7))){
+					loc.x++;
+				}
+			}else if (loc.x==7&&loc.y==5&&loff3){
+				if (!getAgPos(2).equals(new Location(loc.x-1,loc.y))&&!getAgPos(3).equals(new Location(loc.x-1,loc.y))&&!getAgPos(2).equals(new Location(5,4))&&!getAgPos(3).equals(new Location(5,4))){
+					loc.x--;
+				}
+			}else if (loc.y==6&&loc.x==4&&l1&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))&&!getAgPos(3).equals(new Location(loc.x+1,loc.y))){
+				loc.x++;
+			}else if(loc.y==5&&loc.x==7&&l3&&!getAgPos(2).equals(new Location(loc.x-1,loc.y))&&!getAgPos(3).equals(new Location(loc.x-1,loc.y))){
+				loc.x--;
 			}
 			setAgPos(1, loc);
 		}
@@ -192,14 +232,24 @@ class CrossModel extends GridWorldModel {
 				loc.y++;
 			}else if (loc.x==6&&loc.y>=1&&loc.y<=11&&loc.y!=7&&!getAgPos(3).equals(new Location(loc.x,loc.y-1))&&!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))){
 				loc.y--;
-			}else if(loc.y==4&&loc.x==5&&l2&&!getAgPos(1).equals(new Location(loc.x,loc.y+1))&&!getAgPos(3).equals(new Location(loc.x,loc.y+1))&&!getAgPos(0).equals(new Location(loc.x,loc.y+1))){
-				loc.y++;
-			}else if(loc.y==7&&loc.x==6&&l4&&!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(3).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))){
-				loc.y--;
 			}else if(loc.x==5&&loc.y==11&&!getAgPos(1).equals(new Location(loc.x-1,loc.y))&&!getAgPos(3).equals(new Location(loc.x+1,loc.y))){
 				loc.x=6;
 			}else if(loc.x==6&&loc.y==0&&!getAgPos(1).equals(new Location(loc.x+1,loc.y))&&!getAgPos(3).equals(new Location(loc.x-1,loc.y))){
 				loc.x=5;
+			}else if (loff2&&loc.x==5&&loc.y==4){
+					if(!getAgPos(1).equals(new Location(loc.x,loc.y+1))&&!getAgPos(3).equals(new Location(loc.x,loc.y+1))&&!getAgPos(0).equals(new Location(loc.x,loc.y+1))&&!getAgPos(1).equals(new Location(4,6))&&!getAgPos(3).equals(new Location(4,6))){
+						loc.y++;
+					}else if(getAgPos(3).equals(new Location(6,7))&&!getAgPos(1).equals(new Location(loc.x,loc.y+1))){
+						loc.y++;
+					}
+			}else if(loc.x==6&&loc.y==7&&loff4){
+				if(!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(3).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))&&!getAgPos(1).equals(new Location(7,5))&&!getAgPos(3).equals(new Location(7,5))){
+						loc.y--;
+					}
+			}else if(loc.y==4&&loc.x==5&&l2&&!getAgPos(1).equals(new Location(loc.x,loc.y+1))&&!getAgPos(3).equals(new Location(loc.x,loc.y+1))&&!getAgPos(0).equals(new Location(loc.x,loc.y+1))){
+				loc.y++;
+			}else if(loc.y==7&&loc.x==6&&l4&&!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(3).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))){
+				loc.y--;
 			}
 			
 			
@@ -219,13 +269,21 @@ class CrossModel extends GridWorldModel {
 				loc.x++;
 			}else if(loc.x==5&&loc.y>=6&&loc.y<=10&&!getAgPos(1).equals(new Location(loc.x,loc.y+1))&&!getAgPos(0).equals(new Location(loc.x,loc.y+1))&&!getAgPos(2).equals(new Location(loc.x,loc.y+1))){
 				loc.y++;
-			}else if(loc.x==6&&loc.y==7&&l4&&!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))&&!getAgPos(2).equals(new Location(loc.x,loc.y-1))){
-				loc.y--;
-			}else if(loc.x==4&&loc.y==6&&l1&&!getAgPos(1).equals(new Location(loc.x+1,loc.y))&&!getAgPos(0).equals(new Location(loc.x+1,loc.y))&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))){
-				loc.x++;
 			}else if(loc.x==0&&loc.y==5&&!getAgPos(1).equals(new Location(loc.x,loc.y+1))&&!getAgPos(0).equals(new Location(loc.x,loc.y+1))&&!getAgPos(2).equals(new Location(loc.x,loc.y+1))){
 				loc.y++;
 			}else if(loc.x==5&&loc.y==11&&!getAgPos(1).equals(new Location(loc.x+1,loc.y))&&!getAgPos(0).equals(new Location(loc.x+1,loc.y))&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))){
+				loc.x++;
+			}else if(loff4&&loc.x==6&&loc.y==7){
+				if(!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))&&!getAgPos(2).equals(new Location(loc.x,loc.y-1))&&!getAgPos(1).equals(new Location(7,5))&&!getAgPos(2).equals(new Location(7,5))&&!getAgPos(1).equals(new Location(5,4))&&!getAgPos(2).equals(new Location(5,4))){
+					loc.y--;
+				}
+			}else if(loff1&&loc.x==4&&loc.y==6){
+				if(!getAgPos(1).equals(new Location(loc.x+1,loc.y))&&!getAgPos(0).equals(new Location(loc.x+1,loc.y))&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))){
+					loc.x++;
+				}
+			}else if(loc.x==6&&loc.y==7&&l4&&!getAgPos(1).equals(new Location(loc.x,loc.y-1))&&!getAgPos(0).equals(new Location(loc.x,loc.y-1))&&!getAgPos(2).equals(new Location(loc.x,loc.y-1))){
+				loc.y--;
+			}else if(loc.x==4&&loc.y==6&&l1&&!getAgPos(1).equals(new Location(loc.x+1,loc.y))&&!getAgPos(0).equals(new Location(loc.x+1,loc.y))&&!getAgPos(2).equals(new Location(loc.x+1,loc.y))){
 				loc.x++;
 			}
 			
@@ -253,35 +311,43 @@ class CrossModel extends GridWorldModel {
 			String label;
 			switch(id){
 				case 0: label="P";c = Color.black; break;
-				case 1:label="C"; c = Color.yellow;
+				case 1:label="C"; c = Color.orange;
 				break;
-				case 2: label="C"; c = Color.yellow;
+				case 2: label="C"; c = Color.orange;
 				break;
-				case 3: label="C"; c = Color.yellow;
+				case 3: label="C"; c = Color.orange;
 				break;
 				case 4: label=" L";
-					if (l1){
+					if( loff1){
+						c= Color.yellow;
+					}else if (l1){
 						c = Color.green;
 					}else{
 						c = Color.red;
 					}
 					break;
 				case 5: label=" L";
-				if (l2){
+				if( loff2){
+						c= Color.yellow;
+					}else if (l2){
 						c = Color.green;
 					}else{
 						c = Color.red;
 					}
 					break;
 				case 6: label=" L";
-				if (l3){
+				if( loff3){
+						c= Color.yellow;
+					}else if (l3){
 						c = Color.green;
 					}else{
 						c = Color.red;
 					}
 					break;
 				case 7: label=" L";
-				if (l4){
+				if( loff4){
+						c= Color.yellow;
+					}else if (l4){
 						c = Color.green;
 					}else{
 						c = Color.red;

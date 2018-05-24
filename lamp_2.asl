@@ -4,7 +4,7 @@
 
 /* Initial goals */
 
-!red.
+!turnoff.
 
 /* Plans */
 
@@ -17,4 +17,9 @@
 	switch2;
       -red;
 	  !green.
-
+	  
++!turnoff : true <- 
+	turnoff2;
+	.wait(50000);
+	-turnoff;
+	!red.
