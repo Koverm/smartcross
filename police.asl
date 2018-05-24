@@ -9,20 +9,32 @@
 /* Plans */
 
 +!start :true<-
-	.wait(5000);
-	.send(car_1,tell,policestarted);
-	.send(car_2,tell,policestarted);
-	.send(car_3,tell,policestarted);
+	-arrive;
+	.wait(15000);
+	.send(car_1,tell,policeontheway);
+	.send(car_2,tell,policeontheway);
+	.send(car_3,tell,policeontheway);
+	+domove;
 	!move.
 
-+!move: arrived<-.send(car_1,untell,policestarted);
-	.send(car_2,untell,policestarted);
-	.send(car_3,untell,policestarted);
+	
++arrived: true<-
+	.send(car_1,untell,policeontheway);
+	.send(car_2,untell,policeontheway);
+	.send(car_3,untell,policeontheway);
 	.send(car_1,tell,policearrived);
 	.send(car_2,tell,policearrived);
-	.send(car_3,tell,policearrived).
+	.send(car_3,tell,policearrived);
+	-domove.	
+		
++!move :domove <- 
+	move(police);
+	!move.
+
++!move: not domove<-
 	
-+!move :true <- move(police);!move.
+	!start;
+	police_arrived.
 
 
 

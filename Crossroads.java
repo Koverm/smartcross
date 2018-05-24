@@ -314,6 +314,19 @@ class CrossModel extends GridWorldModel {
 			}else if(loc.x==6&&loc.y==1){
 				loc.x++;
 				policeArrived();
+			}else if(loc.x==7&&loc.y==1){
+				loc.y--;
+			}else if(loc.y==0&&(loc.x==7 || loc.x==6) ){
+				loc.x--;
+			}else if(loc. x==5&&loc.y>=0&&loc.y<=5){
+				loc.y++;
+			}else if(loc.x>=5&&loc.x<=10&&loc.y==6){
+				loc.x++;
+			}else if(loc.x==11 && (loc.y == 6 || loc.y == 5)){
+				loc.y--;
+			}else if(loc.x==11 && loc.y == 4){
+				loc.x--;
+				policeArrived();
 			}
 			
 			
