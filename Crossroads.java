@@ -46,6 +46,7 @@ public class Crossroads extends Environment{
 	public static final Term mc1 = Literal.parseLiteral("move(car_1)");
 	public static final Term mc2 = Literal.parseLiteral("move(car_2)");
 	public static final Term mc3 = Literal.parseLiteral("move(car_3)");
+	public static final Term mpo = Literal.parseLiteral("move(police)");
 	
 	
 	@Override
@@ -53,17 +54,17 @@ public class Crossroads extends Environment{
 		model = new CrossModel();
 		view = new CrossView(model);
 		model.setView(view);
-		updatePercepts();
+		
 		l1=true;
 		l2=false;
 		l3=true;
 		l4=false;
 		pedlast=4;
 		
-		loff1 = false;
-		loff2 = false;
-		loff3 = false;
-		loff4 = false;
+		loff1 = true;
+		loff2 = true;
+		loff3 = true;
+		loff4 = true;
 		
     }
 	
@@ -108,6 +109,8 @@ public class Crossroads extends Environment{
 			}
 			else if (action.equals(toff4)){
 				loff4 = true;
+			}else if (action.equals(mpo)){
+				model.movePolice();
 			}
 			
 			
@@ -115,7 +118,6 @@ public class Crossroads extends Environment{
             e.printStackTrace();
         }
 		
-		updatePercepts();
 
         try {
             Thread.sleep(1000);
@@ -126,10 +128,15 @@ public class Crossroads extends Environment{
 	}
 	
 	
-	void updatePercepts() {
-        clearPercepts();
-	}
 	
+	void policeArrived(){
+		clearPercepts();
+		
+		Literal arr = Literal.parseLiteral("arrived");
+		
+		addPercept("police",arr);
+		informAgsEnvironmentChanged();
+	}
 	@Override
     public void stop() {
         super.stop();
@@ -142,7 +149,7 @@ class CrossModel extends GridWorldModel {
 
 		private CrossModel() {
 			// Size of the map, num of agents to display
-            super(CrossSize, CrossSize, 8);
+            super(CrossSize, CrossSize, 9);
 
 			try {
 				
@@ -164,6 +171,9 @@ class CrossModel extends GridWorldModel {
 				setAgPos(6, 7,4);
 				//lamp4
 				setAgPos(7, 7,7);
+				
+				//police
+				setAgPos(8,10,4);
 				
 
             } catch (Exception e) {
@@ -290,6 +300,26 @@ class CrossModel extends GridWorldModel {
 			
 			setAgPos(3, loc);
 		}
+		
+		void movePolice(){
+			Location loc;
+			loc	= getAgPos(8);
+			
+			if (loc.x==10&&loc.y==4){
+				loc.y++;
+			}else if(loc.x<=10&&loc.x>6&&loc.y==5){
+				loc.x--;
+			}else if(loc.x==6&&loc.y<=5&&loc.y>1){
+				loc.y--;
+			}else if(loc.x==6&&loc.y==1){
+				loc.x++;
+				policeArrived();
+			}
+			
+			
+			setAgPos(8, loc);
+		}
+		
 }
 	class CrossView extends GridWorldView {
 
@@ -353,9 +383,10 @@ class CrossModel extends GridWorldModel {
 						c = Color.red;
 					}
 					break;
+				case 8: label="*";c = Color.blue;break;
+				
 				default: label="X"; break;
 			}
-			label=label+(id);
 			
 			super.drawAgent(g, x, y, c, -1);
 			g.setColor(Color.white);

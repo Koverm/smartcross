@@ -8,6 +8,6 @@ MAS smartCross {
 
     environment: Crossroads
 
-    agents: pedestrian; car_1 ; car_2; car_3; lamp_1; lamp_2; lamp_3; lamp_4;
+    agents: pedestrian; car_1 ; car_2; car_3; lamp_1; lamp_2; lamp_3; lamp_4; police;
 
 }
