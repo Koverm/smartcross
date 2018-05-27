@@ -130,11 +130,19 @@ public class Crossroads extends Environment{
 	
 	
 	void policeArrived(){
-		clearPercepts();
 		
 		Literal arr = Literal.parseLiteral("arrived");
 		
 		addPercept("police",arr);
+		informAgsEnvironmentChanged();
+	}
+	
+	
+	void policeMoving(){
+		
+		Literal arr = Literal.parseLiteral("arrived");
+		
+		removePercept("police",arr);
 		informAgsEnvironmentChanged();
 	}
 	@Override
@@ -307,6 +315,7 @@ class CrossModel extends GridWorldModel {
 			
 			if (loc.x==10&&loc.y==4){
 				loc.y++;
+				policeMoving();
 			}else if(loc.x<=10&&loc.x>6&&loc.y==5){
 				loc.x--;
 			}else if(loc.x==6&&loc.y<=5&&loc.y>1){
@@ -316,6 +325,7 @@ class CrossModel extends GridWorldModel {
 				policeArrived();
 			}else if(loc.x==7&&loc.y==1){
 				loc.y--;
+				policeMoving();
 			}else if(loc.y==0&&(loc.x==7 || loc.x==6) ){
 				loc.x--;
 			}else if(loc. x==5&&loc.y>=0&&loc.y<=5){
@@ -354,11 +364,11 @@ class CrossModel extends GridWorldModel {
 			String label;
 			switch(id){
 				case 0: label="P";c = Color.black; break;
-				case 1:label="C"; c = Color.orange;
+				case 1:label="C1"; c = Color.orange;
 				break;
-				case 2: label="C"; c = Color.orange;
+				case 2: label="C2"; c = Color.orange;
 				break;
-				case 3: label="C"; c = Color.orange;
+				case 3: label="C3"; c = Color.orange;
 				break;
 				case 4: label=" L";
 					if( loff1){

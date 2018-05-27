@@ -20,7 +20,7 @@
 	  
 +!turnoff : true <- 
 	turnoff1;
-	.wait(25000);
+	.wait(20000);
 	!green.
 	
 

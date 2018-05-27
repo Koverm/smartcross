@@ -1,22 +1,20 @@
-// Agent police in project smartCross.mas2j
-
-/* Initial beliefs and rules */
-
-/* Initial goals */
-
-!start.
-
-/* Plans */
-
+// Agent police in project smartCross.mas2j
+
+/* Initial beliefs and rules */
+
+/* Initial goals */
+
+!start.
+
+/* Plans */
+
 +!start :true<-
-	-arrive;
-	.wait(15000);
+	.wait(30000);
 	.send(car_1,tell,policeontheway);
 	.send(car_2,tell,policeontheway);
 	.send(car_3,tell,policeontheway);
 	+domove;
 	!move.
-
 	
 +arrived: true<-
 	.send(car_1,untell,policeontheway);
@@ -29,12 +27,20 @@
 		
 +!move :domove <- 
 	move(police);
-	!move.
+	!move.
 
 +!move: not domove<-
-	
-	!start;
+	!restart;
 	police_arrived.
 
-
++!restart :true<-
+	.wait(10000);
+	.send(car_1,untell,policearrived);
+	.send(car_2,untell,policearrived);
+	.send(car_3,untell,policearrived);
+	.send(car_1,tell,policeontheway);
+	.send(car_2,tell,policeontheway);
+	.send(car_3,tell,policeontheway);
+	+domove;
+	!move.
 
