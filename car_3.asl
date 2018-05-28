@@ -9,14 +9,13 @@
 /* Plans */
 
 +!move : policeontheway<-
-	wait(car_3);
-	-policearrived.
+	wait(car_3).
 
 +!move : true <-
 	move(car_3);
 	!move.
 
 +policearrived:true<- 
-	!!move.
+	!move.
 
 
